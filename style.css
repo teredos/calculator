@@ -33,7 +33,7 @@ body {
 }
 #calculations, #result {
     color: black;
-    font-family: "Digital-7", Arial;
+    font-family: "Digital-7";
 }
 #calculations {
     font-size: 2.4em;

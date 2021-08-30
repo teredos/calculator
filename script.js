@@ -30,7 +30,6 @@ function hasOperator(string) {
         return false;
     }
 }
-
 function buttonResponse() {
     const numberBtn = document.querySelectorAll(".number");
     const operatorBtn = document.querySelectorAll(".operator");
@@ -38,6 +37,49 @@ function buttonResponse() {
     const equalsBtn = document.querySelector("#equals");
     const clearBtn = document.querySelector("#clear");
 
+    function decimal() {
+        if (presentCalc.innerHTML == "" || presentCalc.innerHTML == "−") {
+            return;
+        } else if (presentCalc.innerHTML.includes(".") == false) {
+            presentCalc.innerHTML += "."
+            if (hasOperator(presentCalc.innerHTML) || hasOperator(pastCalc.innerHTML)) {
+                num2 += ".";
+            } else {
+                num1 += ".";
+            }
+        };
+    }
+    function equals() {
+        if (operator == "" || num1 == "" || num2 == "") {
+            return;
+        }
+        answer = operate(operator, num1, num2);
+        pastCalc.innerHTML += presentCalc.innerHTML + "=";
+        if (answer == Infinity) {
+            operator = "";
+            num1 = "";
+            num2 = "";
+            pastCalc.innerHTML = "";
+            presentCalc.innerHTML = "";
+            alert ("Trying to divide by 0?\nWe don't do that here.");
+            return;
+        }
+        if (String(answer).includes(".") && String(answer).length > String(answer.toFixed(6)).length) {
+            presentCalc.innerHTML = answer.toFixed(6);
+        } else {
+            presentCalc.innerHTML = answer;
+        }
+        num1 = answer;
+        num2 = "";
+        console.log(answer);
+    }
+    function clear() {
+        operator = "";
+        num1 = "";
+        num2 = "";
+        pastCalc.innerHTML = "";
+        presentCalc.innerHTML = "";
+    }
     for (i = 0; i < 10; i++) {
         let specNumberBtn = numberBtn[i];
         specNumberBtn.addEventListener("click", () => {
@@ -103,49 +145,77 @@ function buttonResponse() {
             presentCalc.innerHTML = "";
         });
     }
-    decimalBtn.addEventListener("click", () => {
-        if (presentCalc.innerHTML == "" || presentCalc.innerHTML == "−") {
-            return;
-        } else if (presentCalc.innerHTML.includes(".") == false) {
-            presentCalc.innerHTML += "."
-            if (hasOperator(presentCalc.innerHTML) || hasOperator(pastCalc.innerHTML)) {
-                num2 += ".";
-            } else {
-                num1 += ".";
+
+    decimalBtn.addEventListener("click", () => { decimal(); });
+    equalsBtn.addEventListener("click", () => { equals(); });
+    clearBtn.addEventListener("click", () => { clear(); });
+
+    document.addEventListener("keydown", function(event) {
+        // keyboard functionality for decimal, equals and clear buttons
+        if (event.key == ".") { decimal(); }
+        else if (event.key == "=") { equals(); }
+        else if (event.key == "C" || event.key == "c" || event.key == "Delete" || event.key == "Backspace") { clear(); }
+        // keyboard functionality for number buttons
+        for (j = 0; j < 10; j++) {
+            switch (event.key == j) {
+                case true:
+                    if (hasOperator(presentCalc.innerHTML) || hasOperator(pastCalc.innerHTML)) {
+                        num2 += j;
+                    } else {
+                        num1 += j;
+                    }
+                    presentCalc.innerHTML += j;
+                    console.log(operator, num1, num2);
+                return;
             }
-        }; 
-    });
-    equalsBtn.addEventListener("click", () => {
-        if (operator == "" || num1 == "" || num2 == "") {
+        }
+        // keyboard functionality for operator buttons
+        if (event.key == "Shift") {
             return;
         }
-        answer = operate(operator, num1, num2);
-        pastCalc.innerHTML += presentCalc.innerHTML + "=";
-        if (answer == Infinity) {
-            operator = "";
-            num1 = "";
-            num2 = "";
-            pastCalc.innerHTML = "";
-            presentCalc.innerHTML = "";
-            alert ("Trying to divide by 0?\nWe don't do that here.");
+        if (presentCalc.innerHTML.slice(-1) == ".") {
+            return;
+        } else if (presentCalc.innerHTML == "" && pastCalc.innerHTML == "") {
             return;
         }
-        if (String(answer).includes(".") && String(answer).length > String(answer.toFixed(6)).length) {
-            presentCalc.innerHTML = answer.toFixed(6);
-        } else {
+        if (hasOperator(pastCalc.innerHTML.slice(-1)) == true && presentCalc.innerHTML == "") {
+            if (event.key == "-") {
+                presentCalc.innerHTML += "−";
+                num2 += "-";
+            } else {
+                return;
+            }
+        } else if (hasOperator(pastCalc.innerHTML.slice(-1)) == true) {
+            answer = operate(operator, num1, num2);
+            pastCalc.innerHTML += presentCalc.innerHTML + "=";
             presentCalc.innerHTML = answer;
+            num1 = answer;
+            num2 = "";
+            console.log(answer);
+            console.log(operator, num1, num2);
         }
-        num1 = answer;
-        num2 = "";
-        console.log(answer);
-    });
-    clearBtn.addEventListener("click", () => {
-        operator = "";
-        num1 = "";
-        num2 = "";
-        pastCalc.innerHTML = "";
+        if (event.key == "/") {
+            operator = "/";
+            presentCalc.innerHTML += "÷";
+        } else if (event.key == "x" || event.key == "*") {
+            operator = "*";
+            presentCalc.innerHTML += "×";
+        } else if (event.key == "-") {
+            if (presentCalc.innerHTML.slice(-1) == "−") {
+                return;
+            } else {
+                operator = "-";
+                presentCalc.innerHTML += "−";
+            }
+        } else if (event.key == "+") {
+            operator = "+";
+            presentCalc.innerHTML += "+";
+        }
+        if (pastCalc.innerHTML.includes("=")) {
+            pastCalc.innerHTML = "";
+        }
+        pastCalc.innerHTML += presentCalc.innerHTML;
         presentCalc.innerHTML = "";
     });
 };
-
 buttonResponse();
