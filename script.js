@@ -153,7 +153,7 @@ function buttonResponse() {
     document.addEventListener("keydown", function(event) {
         // keyboard functionality for decimal, equals and clear buttons
         if (event.key == ".") { decimal(); }
-        else if (event.key == "=") { equals(); }
+        else if (event.key == "=" || event.key == "Enter") { equals(); }
         else if (event.key == "C" || event.key == "c" || event.key == "Delete" || event.key == "Backspace") { clear(); }
         // keyboard functionality for number buttons
         for (j = 0; j < 10; j++) {
