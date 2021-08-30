@@ -1,6 +1,10 @@
+@font-face {
+    font-family: Mister-Pixel-Reg;
+    src: url(Mister\ Pixel\ Regular.otf);
+}
 html {
     text-align: center;
-    font-family: Arial;
+    font-family: Mister-Pixel-Reg;
 }
 body {
     display: flex;
@@ -13,7 +17,6 @@ body {
     flex-direction: column;
     align-items: center;
     border: 3px solid black;
-    border-radius: 5px;
     width: 400px;
     height: 550px;
     background-color: rgba(0, 0, 0, 0.726);
@@ -30,10 +33,12 @@ body {
     background-color: #b4c6b6;
     border-radius: 5px;
     overflow: hidden;
+    border: 3px solid rgb(75, 75, 75);
 }
 #calculations, #result {
-    color: black;
-    font-family: "Digital-7";
+    color: #2a312b;
+    font-family: Mister-Pixel-Reg;
+    font-weight: 900;
 }
 #calculations {
     font-size: 2.4em;
@@ -53,6 +58,7 @@ body {
     height: 70%;
     background-color: rgba(128, 128, 128, 0.39);
     border-radius: 5px;
+    font-family: Arial;
 }
 .button {
     display: flex;
