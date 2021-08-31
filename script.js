@@ -151,6 +151,9 @@ function buttonResponse() {
     clearBtn.addEventListener("click", () => { clear(); });
 
     document.addEventListener("keydown", function(event) {
+        if (event.key == "Shift") {
+            return;
+        }
         // keyboard functionality for decimal, equals and clear buttons
         if (event.key == ".") { decimal(); }
         else if (event.key == "=" || event.key == "Enter") { equals(); }
@@ -170,52 +173,51 @@ function buttonResponse() {
             }
         }
         // keyboard functionality for operator buttons
-        if (event.key == "Shift") {
-            return;
-        }
-        if (presentCalc.innerHTML.slice(-1) == ".") {
-            return;
-        } else if (presentCalc.innerHTML == "" && pastCalc.innerHTML == "") {
-            return;
-        }
-        if (hasOperator(pastCalc.innerHTML.slice(-1)) == true && presentCalc.innerHTML == "") {
-            if (event.key == "-") {
-                presentCalc.innerHTML += "−";
-                num2 += "-";
-            } else {
+        if (event.key == "+" || event.key == "-" || event.key == "*" || event.key == "x" || event.key == "/") {
+            if (presentCalc.innerHTML.slice(-1) == ".") {
+                return;
+            } else if (presentCalc.innerHTML == "" && pastCalc.innerHTML == "") {
                 return;
             }
-        } else if (hasOperator(pastCalc.innerHTML.slice(-1)) == true) {
-            answer = operate(operator, num1, num2);
-            pastCalc.innerHTML += presentCalc.innerHTML + "=";
-            presentCalc.innerHTML = answer;
-            num1 = answer;
-            num2 = "";
-            console.log(answer);
-            console.log(operator, num1, num2);
-        }
-        if (event.key == "/") {
-            operator = "/";
-            presentCalc.innerHTML += "÷";
-        } else if (event.key == "x" || event.key == "*") {
-            operator = "*";
-            presentCalc.innerHTML += "×";
-        } else if (event.key == "-") {
-            if (presentCalc.innerHTML.slice(-1) == "−") {
-                return;
-            } else {
-                operator = "-";
-                presentCalc.innerHTML += "−";
+            if (hasOperator(pastCalc.innerHTML.slice(-1)) == true && presentCalc.innerHTML == "") {
+                if (event.key == "-") {
+                    presentCalc.innerHTML += "−";
+                    num2 += "-";
+                } else {
+                    return;
+                }
+            } else if (hasOperator(pastCalc.innerHTML.slice(-1)) == true) {
+                answer = operate(operator, num1, num2);
+                pastCalc.innerHTML += presentCalc.innerHTML + "=";
+                presentCalc.innerHTML = answer;
+                num1 = answer;
+                num2 = "";
+                console.log(answer);
+                console.log(operator, num1, num2);
             }
-        } else if (event.key == "+") {
-            operator = "+";
-            presentCalc.innerHTML += "+";
+            if (event.key == "/") {
+                operator = "/";
+                presentCalc.innerHTML += "÷";
+            } else if (event.key == "x" || event.key == "*") {
+                operator = "*";
+                presentCalc.innerHTML += "×";
+            } else if (event.key == "-") {
+                if (presentCalc.innerHTML.slice(-1) == "−") {
+                    return;
+                } else {
+                    operator = "-";
+                    presentCalc.innerHTML += "−";
+                }
+            } else if (event.key == "+") {
+                operator = "+";
+                presentCalc.innerHTML += "+";
+            }
+            if (pastCalc.innerHTML.includes("=")) {
+                pastCalc.innerHTML = "";
+            }
+            pastCalc.innerHTML += presentCalc.innerHTML;
+            presentCalc.innerHTML = "";
         }
-        if (pastCalc.innerHTML.includes("=")) {
-            pastCalc.innerHTML = "";
-        }
-        pastCalc.innerHTML += presentCalc.innerHTML;
-        presentCalc.innerHTML = "";
     });
 };
 buttonResponse();
